@@ -10,7 +10,7 @@ def addPrep(circuit, prepTheta, prepPhi):
     circuit.add(2, PS(prepPhi))
 
 def deAddPrep(circuit, prepTheta, prepPhi):
-    circuit.add(2, PS(-prepPhi))
+    circuit.add(1, PS(+prepPhi))
     circuit.add(1, BS.H())
     circuit.add(1, PS(-prepTheta))
     circuit.add(1, BS.H())
