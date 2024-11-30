@@ -51,6 +51,6 @@ docs/_build/
 
 # aqora
 .aqora
-.venv
+
 **/__generated__*.py
 __aqora__/
