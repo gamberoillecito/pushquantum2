@@ -5,23 +5,23 @@ import numpy as np
 def addPrep(circuit, prepTheta, prepPhi):
 
     circuit.add(1, BS.H())
-    circuit.add(1, PS(prepTheta/2))
+    circuit.add(1, PS(prepTheta))
     circuit.add(1, BS.H())
     circuit.add(2, PS(prepPhi))
 
 def deAddPrep(circuit, prepTheta, prepPhi):
     circuit.add(2, PS(-prepPhi))
     circuit.add(1, BS.H())
-    circuit.add(1, PS(-prepTheta/2))
+    circuit.add(1, PS(-prepTheta))
     circuit.add(1, BS.H())
 
 def removePrep(circuit, prepTheta, prepPhi):
-    circuit.add(0, PS(-prepTheta/2))
+    circuit.add(0, PS(-prepTheta))
     circuit.add(0, BS.H())
     circuit.add(0, PS(-prepPhi))
     circuit.add(0, BS.H())
 
-    circuit.add(2, PS(-prepTheta/2))
+    circuit.add(2, PS(-prepTheta))
     circuit.add(2, BS.H())
     circuit.add(2, PS(-prepPhi))
     circuit.add(2, BS.H())
