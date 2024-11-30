@@ -45,10 +45,11 @@ def getFidelityRho(counts):
 def costFunctionAtPhi(counts):
     return (1 - getFidelityRho1(counts))**2 + (1 - getFidelityRho2(counts))**2 + (getFidelityRho1(counts)-getFidelityRho2(counts))**2
 
-def run_circuit(input, circuit,sample_count=10000):
+def run_circuit(input, circuit,sample_count=10000, min_det_phot=100):
         sv = input
 
-        p = pv.Processor("SLOS", circuit, )
+        p = pv.Processor("SLOS", circuit)
+        p.min_detected_photons_filter(0)
         p.with_input(sv)
 
         sampler = pv.algorithm.Sampler(p)  
@@ -86,4 +87,15 @@ def test_loss_function(theta, circuit, sv, phi=0):
     cost += (1- getFidelityRho1(counts))**2
         
     return cost
+
+def loss_function(theta, circuit):
+    sv = pv.StateVector([1,0,1,0])
+    cost = 0
+    Phi = [ 0, np.pi/2, np.pi, 3*np.pi/2 ]
+    for phi_i in Phi:
+        counts = run_circuit(sv, circuit(theta, phi_i))
+        cost += costFunctionAtPhi(counts)
+        
+    return cost
+
 
