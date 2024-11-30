@@ -69,12 +69,16 @@ def addEvolution(circuit, evTheta = None):
 
 # def addMeasure(circuit, )
 
-def fullCircuit(evolTheta, prepTheta = 0, prepPhi = np.pi):
+def fullCircuit(theta_params, prepTheta = 0, prepPhi = np.pi):
+    '''
+    evolTheta: 12 brothers of the evolution circuit to be optimized
+    prepTheta: theta of the initialization circuit
+    prepPhi: phi of the initialization circuit'''
     c = pv.Circuit(4)
     
     addPrep(c, prepTheta=prepTheta, prepPhi=prepPhi)
     c.barrier()
-    addEvolution(c, evolTheta)
+    addEvolution(c, theta_params)
     c.barrier()
     removePrep(c, prepTheta=prepTheta, prepPhi=prepPhi)
     
