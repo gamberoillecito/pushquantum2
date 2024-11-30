@@ -4,6 +4,7 @@ from perceval.components import BS, PS
 from perceval.rendering.circuit import SymbSkin, PhysSkin
 import perceval.components.unitary_components as comp
 from perceval.utils import BasicState, DensityMatrix
+from circuits import fullCircuit
 import numpy as np
 from circuits import addPrep, deAddPrep
 from collections import Counter
@@ -45,11 +46,11 @@ def getFidelityRho(counts):
 def costFunctionAtPhi(counts):
     return (1 - getFidelityRho1(counts))**2 + (1 - getFidelityRho2(counts))**2 + (getFidelityRho1(counts)-getFidelityRho2(counts))**2
 
-def run_circuit(input, circuit,sample_count=10000, min_det_phot=100):
+def run_circuit(input, circuit,sample_count=10000, min_det_phot=0):
         sv = input
 
         p = pv.Processor("SLOS", circuit)
-        p.min_detected_photons_filter(0)
+        p.min_detected_photons_filter(min_det_phot)
         p.with_input(sv)
 
         sampler = pv.algorithm.Sampler(p)  
@@ -88,12 +89,13 @@ def test_loss_function(theta, circuit, sv, phi=0):
         
     return cost
 
-def loss_function(theta, circuit):
+def loss_function(theta_params):
+    circuit = fullCircuit
     sv = pv.StateVector([1,0,1,0])
     cost = 0
     Phi = [ 0, np.pi/2, np.pi, 3*np.pi/2 ]
     for phi_i in Phi:
-        counts = run_circuit(sv, circuit(theta, phi_i))
+        counts = run_circuit(sv, circuit(theta_params, prepTheta=0, prepPhi=phi_i))
         cost += costFunctionAtPhi(counts)
         
     return cost
